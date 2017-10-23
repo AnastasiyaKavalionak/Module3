@@ -1,6 +1,7 @@
 {
   "name": "dir-watcher",
   "version": "0.0.1",
+  "main": "index.js",
   "dependencies": {
     "csv-to-json": "^0.1.2",
     "node-watch": "^0.5.5"

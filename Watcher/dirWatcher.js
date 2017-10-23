@@ -10,13 +10,30 @@ const watch = require('node-watch');
 class DirWatcher {
 
     constructor () {
-        emitter.on ('changed', imp.createJSON);
+        emitter.on ('changedSync', function (filename) {
+            let json = imp.importSync(filename);
+            fs.writeFile(filename.slice(0, -3) + 'json', JSON.stringify(json, null, 2), (err) => {
+                if (err) {
+                    console.log('can not to write json file ' + err);
+                }
+            })
+        });
+
+        emitter.on ('changedAsync', function (filename) {
+            let json = imp.import(filename).then(result => result, error => console.log(error));
+            fs.writeFile(filename.slice(0, -3) + 'json', JSON.stringify(json, null, 2), (err) => {
+                if (err) {
+                    console.log('can not to write json file ' + err);
+                }
+            })
+        });
     }
 
     watch (path, delay) {
         setTimeout(function () {
             watch(path, { filter: /\.csv$/ }, function(event, name) {
                 if (event === 'remove') {
+                    console.log(name);
                     fs.unlink(name.slice(0, -3) + 'json', (err) => {
                         if (err) {
                             console.log('can not remove file' + err);
@@ -24,7 +41,7 @@ class DirWatcher {
                     })
                 }
                 if (event === 'update') {
-                    emitter.emit('changed', name);
+                    emitter.emit('changedAsync', name);
                 }
             });
         }, delay);
