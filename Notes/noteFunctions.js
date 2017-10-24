@@ -1,6 +1,11 @@
 'use strict';
-
-function Add (json, title, body) {
+/**
+ * @function reads list of notes from the given json file if it exists, compares existing of given title in the giving list of notes, adds this note (title end body) in the list if didn't find given title in the list and writes new list in given json file
+ * @param json name of json file
+ * @param title title of note
+ * @param body body of note
+ */
+function add (json, title, body) {
     const fs = require('fs');
     let list;
     if (fs.existsSync(json)) {
@@ -24,7 +29,11 @@ function Add (json, title, body) {
     writerStream.end();
 }
 
-function List (json) {
+/**
+ * @function reads list of notes from the given json file if it exists and displays it on console
+ * @param json name of json file
+ */
+function noteList (json) {
     const fs = require('fs');
     if (fs.existsSync(json)) {
         let list = require(json);
@@ -40,7 +49,12 @@ function List (json) {
     }
 }
 
-function Read (json, title) {
+/**
+ * @function reads list of notes from the given json file if it exists, finds note in this list by given title and displays note on console if found it
+ * @param json name of json file
+ * @param title title of note
+ */
+function read (json, title) {
     const fs = require('fs');
     if (fs.existsSync(json)) {
         let list = require(json);
@@ -60,7 +74,12 @@ function Read (json, title) {
     }
 }
 
-function Remove (json, title) {
+/**
+ * @function reads list of notes from the given json file if it exists, finds note in this list by given title and deletes note from the list if found it
+ * @param json name of json file
+ * @param title title of note
+ */
+function remove (json, title) {
     const fs = require('fs');
     if (fs.existsSync(json)) {
         const writerStream = fs.createWriteStream(json);
@@ -83,7 +102,7 @@ function Remove (json, title) {
         }
 }
 
-module.exports.Add = Add;
-module.exports.List = List;
-module.exports.Read = Read;
-module.exports.Remove = Remove;
+module.exports.add = add;
+module.exports.list = noteList
+module.exports.read = read;
+module.exports.remove = remove;
